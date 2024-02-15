@@ -1,0 +1,1 @@
+PROCESSED_DF_FOLDER = '/data/processed'
