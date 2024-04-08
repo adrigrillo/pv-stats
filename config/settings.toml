@@ -35,3 +35,5 @@ service_zones = [
     3320, 3330, 3340, 3350, 3410, 3421, 3432, 3500, 4200
 ]
 
+[ree]
+max_days_per_request = 15

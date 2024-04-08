@@ -2,8 +2,9 @@ from pathlib import Path
 
 import geopandas as gpd
 
-from utils.df_processing import process_administrative_divisions_df, process_cities_info_df, \
-    process_consumption_per_city_df
+from pv_stats.utils.df_processing import (process_administrative_divisions_df,
+                                          process_cities_info_df,
+                                          process_consumption_per_city_df)
 
 
 def draw_consumption_per_city(cities_info: str | Path,
@@ -18,6 +19,7 @@ def draw_consumption_per_city(cities_info: str | Path,
     """
     cities_info_df = process_cities_info_df(cities_info)
     consumption_per_city_df = process_consumption_per_city_df(consumption_per_city)
+
     administrative_divisions_df = process_administrative_divisions_df(administrative_divisions)
 
     # Match city per administrative division
@@ -32,7 +34,7 @@ def draw_consumption_per_city(cities_info: str | Path,
     cities_info_and_consumption_df['consumption_per_capita'] = (cities_info_and_consumption_df['2021'] /
                                                                 cities_info_and_consumption_df['population'])
     cities_info_and_consumption_df['consumption_per_km2'] = (cities_info_and_consumption_df['2021'] /
-                                                                cities_info_and_consumption_df['superficie_km2'])
+                                                             cities_info_and_consumption_df['superficie_km2'])
 
     cities_info_and_consumption_geo = gpd.GeoDataFrame(cities_info_and_consumption_df, geometry='geometry')
     cities_info_and_consumption_geo.to_file('/data/cities_info_and_consumption.geojson', driver='GeoJSON')

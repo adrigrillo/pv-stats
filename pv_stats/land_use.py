@@ -4,9 +4,9 @@ from typing import List
 import geopandas as gpd
 import pandas as pd
 
-from config.config import settings
-from utils.df_processing import process_land_use_df, join_administrative_divisions_dfs
-from utils.io_utils import read_geo_dataframe, save_dataframe
+from pv_stats.config.config import settings
+from pv_stats.utils.df_processing import process_land_use_df, join_administrative_divisions_dfs
+from pv_stats.utils.io_utils import read_geo_dataframe, save_dataframe
 
 
 def filter_and_group_land_use_per_id(land_use_df: gpd.GeoDataFrame,

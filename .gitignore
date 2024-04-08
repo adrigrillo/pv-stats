@@ -1,3 +1,5 @@
+.secrets.toml
+
 ### VisualStudioCode template
 .vscode/*
 !.vscode/settings.json

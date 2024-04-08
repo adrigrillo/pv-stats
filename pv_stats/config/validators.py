@@ -1,7 +1,5 @@
-import multiprocessing
 from typing import List
 
-import numpy as np
 from dynaconf import Validator
 
 
@@ -18,6 +16,7 @@ def get_logging_validators() -> List[Validator]:
                   default=None),
     ]
 
+
 def get_config_validators() -> List[Validator]:
     """ Data validators.
 
@@ -33,6 +32,27 @@ def get_config_validators() -> List[Validator]:
     ]
 
 
+def get_ree_api_validator() -> List[Validator]:
+    """ REE API validator.
+
+    :return: REE API validator.
+    """
+    return [
+        Validator('ree_data.url',
+                  default='apidatos.ree.es',
+                  is_type_of=str),
+        Validator('ree.url',
+                  default='api.esios.ree.es',
+                  is_type_of=str),
+        Validator('ree.token',
+                  must_exist=True,
+                  is_type_of=str),
+        Validator('ree.max_days_per_request',
+                  default=31,
+                  is_type_of=int)
+    ]
+
+
 def get_validators() -> List[Validator]:
     """ Get the list of validators for the system.
 
@@ -40,5 +60,6 @@ def get_validators() -> List[Validator]:
     """
     validators = get_logging_validators()
     validators += get_config_validators()
+    validators += get_ree_api_validator()
 
     return validators
