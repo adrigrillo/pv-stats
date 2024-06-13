@@ -10,6 +10,25 @@ saving_format = 'geojson'
 [data]
 saving_format = 'csv'
 
+[pv_coverage]
+# Potencia por hectarea en kW/Ha
+power_per_ha_roof = 50
+power_per_ha_floor = 500
+# Horas estimadas de funcionamiento al año
+hef_roof = 1300
+hef_floor = 1650
+# Porcentaje de consumo a cubrir, entre 0 y 1
+consumption_to_cover = 0.5
+
+# Rename of the column to handle it better
+[pv_coverage.column_rename]
+"municipio" = "municipio"
+"km2" = "superficie_km2"
+"nº habitantes" = "population"
+"Consumo anual electricidad - media 2014-2019 (MWh)" = "mean_electricity_consumption"
+"Sup. urbana (Ha)" = "urban_ha"
+"Sup. rústica (Ha)" = "rural_ha"
+
 [land_use]
 urbanized_zones = [
     # Industrial zones
@@ -37,3 +56,20 @@ service_zones = [
 
 [ree]
 max_days_per_request = 15
+
+[ree.generation_mapping]
+"dem" = "Demanda"
+"eol" = "Eólica"
+"nuc" = "Nuclear"
+"car" = "Carbón"
+"cc" = "Ciclo combinado"
+"hid" = "Hidráulica"
+"inter" = "Intercambios int"
+"solFot" = "Solar fotovoltaica"
+"solTer" = "Solar térmica"
+"termRenov" = "Térmica renovable"
+"die" = "Motores diésel"
+"gas" = "Turbina de gas"
+"vap" = "Turbina de vapor"
+"genAux" = "Generación auxiliar"
+"cogenResto" = "Cogeneración y residuos"

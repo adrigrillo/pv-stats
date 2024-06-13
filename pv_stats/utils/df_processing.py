@@ -3,8 +3,8 @@ from pathlib import Path
 import geopandas as gpd
 import pandas as pd
 
-from config.config import settings
-from utils.io_utils import save_geo_dataframe, save_dataframe, read_geo_dataframe, read_dataframe
+from pv_stats.config.config import settings
+from pv_stats.utils.io_utils import save_geo_dataframe, save_dataframe, read_geo_dataframe, read_dataframe
 
 
 def merge_geometries(geodataframe: gpd.GeoDataFrame,
@@ -202,6 +202,26 @@ def join_administrative_divisions_dfs(administrative_divisions_path: str | Path,
 
     save_geo_dataframe('administrative_divisions_with_info', cities_info_geo)
     return cities_info_geo
+
+
+def remap_column_categories(gdf_path: str | Path,
+                            column_name: str,
+                            categories_mapping: dict[str, str],
+                            saving_path: str | Path = None) -> gpd.GeoDataFrame:
+    """
+    Transform the categories of a GeoDataFrame column.
+
+    :param gdf_path: path to the GeoDataFrame.
+    :param column_name: column with the land use categories.
+    :param categories_mapping: dictionary with the land use categories to be transformed.
+    :param saving_path: path to save the transformed GeoDataFrame.
+    :return: GeoDataFrame with the transformed land use categories.
+    """
+    gdf = gpd.read_file(gdf_path)
+    gdf[column_name] = gdf[column_name].map(categories_mapping)
+    if saving_path:
+        gdf.to_file(saving_path)
+    return gdf
 
 
 if __name__ == '__main__':

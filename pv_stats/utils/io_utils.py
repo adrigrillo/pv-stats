@@ -5,8 +5,7 @@ import geopandas as gpd
 import pandas as pd
 from loguru import logger
 
-from config.config import settings
-from constants.system_constants import PROCESSED_DF_FOLDER
+from pv_stats.config.config import settings
 
 
 def read_geo_dataframe(path_to_df: str | Path,
@@ -50,8 +49,8 @@ def save_geo_dataframe(name: str,
         geo_df.to_file(f'{saving_folder}/{name}.{saving_format}')
 
 
-
-def read_dataframe(path_to_df: str | Path) -> pd.DataFrame:
+def read_dataframe(path_to_df: str | Path,
+                   sheet_name: str = None) -> pd.DataFrame:
     """
     Read a dataframe from a specified path.
 
@@ -65,11 +64,15 @@ def read_dataframe(path_to_df: str | Path) -> pd.DataFrame:
         df = pd.read_csv(path_to_df)
     elif path_to_df.suffix == '.json':
         df = pd.read_json(path_to_df)
+    elif path_to_df.suffix == '.xlsx':
+        xl = pd.ExcelFile(path_to_df)
+        if not sheet_name:
+            logger.warning('Sheet name not specified.')
+        df = xl.parse(sheet_name)
     else:
         raise NotImplementedError('The file format is not supported yet.')
 
     return df
-
 
 
 def save_dataframe(name: str,
