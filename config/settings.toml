@@ -55,7 +55,7 @@ service_zones = [
 ]
 
 [ree]
-max_days_per_request = 15
+max_days_per_request = 30
 
 [ree.generation_mapping]
 "dem" = "Demanda"

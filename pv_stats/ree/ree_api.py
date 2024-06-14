@@ -37,7 +37,7 @@ def parse_response(data: Dict) -> DataFrame:
     :param data: Data from the REE API.
     :return: Parsed data.
     """
-    demand_data = dict()
+    parsed_data = dict()
 
     for demand_type in data['included']:
         demand_name = demand_type['attributes']['title']
@@ -46,13 +46,13 @@ def parse_response(data: Dict) -> DataFrame:
             demand_value = value_in_time['value']
 
             # Start from an empty dict if the time is not in the dict
-            demand_for_time = demand_data.get(demand_time, dict())
+            demand_for_time = parsed_data.get(demand_time, dict())
             demand_for_time[demand_name] = demand_value
 
             # Update the dict with the new demand data, as the get returns a copy and it is not updated in place
-            demand_data[demand_time] = demand_for_time
+            parsed_data[demand_time] = demand_for_time
 
-    df = DataFrame.from_dict(demand_data, orient='index')
+    df = DataFrame.from_dict(parsed_data, orient='index')
     return df
 
 
@@ -213,6 +213,37 @@ class REEDataAPI:
         logger.debug('Getting demand data from REE API from {} to {} in {}.', start_date, end_date, time_trunc)
         data = self.get_data(category='demanda',
                              widget='demanda-tiempo-real',
+                             start_date=start_date,
+                             end_date=end_date,
+                             time_trunc=time_trunc,
+                             geo_trunc=geo_trunc,
+                             geo_limit=geo_limit,
+                             geo_ids=geo_ids)
+        data = parse_response(data)
+        return data
+
+    def get_generation_estructure(self,
+                                  start_date: str | datetime,
+                                  end_date: str | datetime,
+                                  time_trunc: str,
+                                  geo_trunc: Optional[str],
+                                  geo_limit: Optional[str],
+                                  geo_ids: Optional[int]) -> DataFrame:
+        """ Get the demand data from the REE API.
+
+        :param start_date: Defines the starting date in ISO 8601 format. Example: 2021-01-01T00:00.
+        :param end_date: Defines the ending date in ISO 8601 format. Example: 2021-01-01T00:10.
+        :param time_trunc: Defines the time aggregation of the requested data. Valid values are: hour, day, month, year.
+        :param geo_trunc: Optional. Defines the geographical scope of the requested data.
+          Currently, the only allowed value is: electric_system.
+        :param geo_limit: Optional. Defines the electrical system of the requested data.
+          Valid values are: peninsular, canarias, baleares, ceuta, melilla, ccaa.
+        :param geo_ids: Optional. Defines the ID of the previously defined autonomous community/electrical system.
+        :return: DataFrame with the demand data.
+        """
+        logger.debug('Getting generation data from REE API from {} to {} in {}.', start_date, end_date, time_trunc)
+        data = self.get_data(category='generacion',
+                             widget='estructura-generacion',
                              start_date=start_date,
                              end_date=end_date,
                              time_trunc=time_trunc,

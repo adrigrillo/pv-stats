@@ -41,7 +41,6 @@ def parse_response(data: Dict,
     """
     generation_data = DataFrame(data['valoresHorariosGeneracion'])
     # The time is in the 'ts' column, so we need to parse it to datetime, check if it can be parsed
-    # TODO: check error https://demanda.ree.es/visiona/peninsula/nacional/tablas/2019-10-27/2
     generation_data['Fecha'] = generation_data['ts'].apply(lambda x: parse_timestamp(x))
 
     # The data includes some rows of the previous and next day, so we filter them
